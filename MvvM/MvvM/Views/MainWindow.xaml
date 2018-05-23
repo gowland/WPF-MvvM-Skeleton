@@ -1,17 +1,52 @@
-﻿<Window x:Class="MvvM.CustomerViewModels.MainWindow"
+﻿<Window x:Class="MvvM.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MvvM"
+        xmlns:viewModels="clr-namespace:MvvM.ViewModels"
+        xmlns:models="clr-namespace:MvvM.Models"
         mc:Ignorable="d"
+        d:DataContext="{Binding Source={d:DesignInstance Type={x:Type viewModels:CustomerViewModel}}}"
         Title="MainWindow" Height="350" Width="525">
-    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-        <Label>Customer Name:</Label>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         
-        <!--Change "UpdateSourceTrigger", otherwise UpdateCommand will only be triggered when "LostFocus" eventuates-->
-        <TextBox Text="{Binding Customer.Name, UpdateSourceTrigger=PropertyChanged}" Width="330"/>
-        
-        <Button Command="{Binding UpdateCommand}" Width="85">Update</Button>
-    </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <ListBox x:Name="customerList" ItemsSource="{Binding Customers}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:Customer}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}"/>
+                            <TextBlock Text="{Binding Updates}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            
+            <Button Command="{Binding UpdateCommand}" CommandParameter="{Binding SelectedItem, ElementName=customerList}" Width="85">Update</Button>
+        </StackPanel>
+
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Customers}" CanUserReorderColumns="True" CanUserResizeColumns="True"
+                CanUserResizeRows="False" CanUserSortColumns="True" AutoGenerateColumns="False">
+          <DataGrid.Columns>
+              <DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding Name}"/>
+              <DataGridTextColumn Header="Updates" IsReadOnly="True" Binding="{Binding Updates}"/>
+              <DataGridTemplateColumn Header="Updates" IsReadOnly="True">
+                  <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                          <Canvas Width="100" Height="15">
+                              <Rectangle Width="100" Height="13" Fill="Yellow" />
+                              <Rectangle Width="{Binding Updates}" Height="13" Fill="Red" />
+                          </Canvas>
+                      </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+          </DataGrid.Columns>
+      </DataGrid>
+
+    </Grid>
 </Window>

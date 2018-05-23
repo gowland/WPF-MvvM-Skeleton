@@ -1,39 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using MvvM.Annotations;
+﻿using MvvMCore.ViewModels;
 
 namespace MvvM.Models
 {
-    public class Customer : INotifyPropertyChanged
+    public class Customer : NotifyPropertyChangedBase
     {
         private string _name;
+        private int _updates;
 
         public Customer(string customerName)
         {
             Name = customerName;
         }
 
-        public string Name
+        public int Updates
         {
-            get { return _name; }
-            set
-            {
-                _name = value; 
-                OnPropertyChanged("Name");
-            }
+            get => _updates;
+            set => SetProperty(ref _updates, value);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public string Name
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get => _name;
+            set
+            {
+                // TODO: Use base class setter method
+                _name = value; 
+                OnPropertyChanged();
+            }
         }
     }
 }
