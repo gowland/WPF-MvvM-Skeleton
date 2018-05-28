@@ -16,18 +16,21 @@
         </Grid.RowDefinitions>
         
         <StackPanel Orientation="Horizontal">
-            <ListBox x:Name="customerList" ItemsSource="{Binding Customers}">
+            <ListBox x:Name="CustomerList" ItemsSource="{Binding Customers}">
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:Customer}">
-                        <StackPanel Orientation="Horizontal">
+                        <UniformGrid Rows="1">
                             <TextBlock Text="{Binding Name}"/>
                             <TextBlock Text="{Binding Updates}"/>
-                        </StackPanel>
+                        </UniformGrid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
             
-            <Button Command="{Binding UpdateCommand}" CommandParameter="{Binding SelectedItem, ElementName=customerList}" Width="85">Update</Button>
+            <Button Command="{Binding UpdateCommand}" CommandParameter="{Binding SelectedItem, ElementName=CustomerList}" Width="85">Update Selected</Button>
+
+            <TextBox x:Name="NewUserName" Width="80" Text="New User Name"/>
+            <Button Command="{Binding AddNewUserCommand}" CommandParameter="{Binding Text, ElementName=NewUserName}" Width="85">Add</Button>
         </StackPanel>
 
         <DataGrid Grid.Row="2" ItemsSource="{Binding Customers}" CanUserReorderColumns="True" CanUserResizeColumns="True"
