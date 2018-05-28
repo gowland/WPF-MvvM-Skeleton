@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -10,33 +11,35 @@ namespace MvvM.ViewModels
 {
     internal class CustomerViewModel : ViewModelBase
     {
+        private readonly ObservableCollection<Customer> _listCollectionView;
+
         /// <summary>
         /// Inintialize a new instance of CustomerViewModel class
         /// </summary>
         public CustomerViewModel()
         {
-            var updateCommand = new Command(o => UpdateCustomer(o), o => CanUpdate(o));
+            var updateCommand = new Command(UpdateCustomer, CanUpdate);
             UpdateCommand = updateCommand;
-            Customers = new ListCollectionView(new []
+
+            AddNewUserCommand = new Command(name => AddNewUser((string)name), name => IsValidUserName((string)name));
+
+            _listCollectionView = new ObservableCollection<Customer>(new []
             {
                 new Customer("Matze"),
                 new Customer("Irwin"),
                 new Customer("Fitzpatrick"),
             });
+
+            Customers = new ListCollectionView(_listCollectionView);
             Customers.CurrentChanged += (sender, args) => updateCommand.RaiseCanExecuteChanged();
         }
 
         public ICollectionView Customers { get; }
 
-        /// <summary>
-        /// Get the UpdateCommand for the ViewModel
-        /// </summary>
         public ICommand UpdateCommand { get; }
 
+        public ICommand AddNewUserCommand { get; }
 
-        /// <summary>
-        /// Get or set bool indicating if customer can be updated
-        /// </summary>
         public bool CanUpdate(object parameter)
         {
             if (!(parameter is Customer selectedCustomer))
@@ -44,12 +47,9 @@ namespace MvvM.ViewModels
                 return false;
             }
 
-            return !String.IsNullOrWhiteSpace(selectedCustomer.Name);
+            return IsValidUserName(selectedCustomer.Name);
         }
 
-        /// <summary>
-        /// Save changes made to the Customer instance
-        /// </summary>
         public void UpdateCustomer(object parameter)
         {
             if (!CanUpdate(parameter))
@@ -63,6 +63,16 @@ namespace MvvM.ViewModels
             }
 
             Console.WriteLine("Save failed");
+        }
+
+        private void AddNewUser(string name)
+        {
+            _listCollectionView.Add(new Customer(name));
+        }
+
+        private static bool IsValidUserName(string name)
+        {
+            return !String.IsNullOrWhiteSpace(name);
         }
     }
 }
