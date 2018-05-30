@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace MvvM.Converters
+namespace MvvMCore.Converters
 {
     /*
      * Usage example:

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace MvvM.Converters
+namespace MvvMCore.Converters
 {
     public class TemplateSelectorByTypeOption
     {

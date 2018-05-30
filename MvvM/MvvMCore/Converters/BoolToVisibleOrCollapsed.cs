@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Data;
 
-namespace MvvM.Converters
+namespace MvvMCore.Converters
 {
     public class BoolToVisibleOrCollapsed : IValueConverter
     {
