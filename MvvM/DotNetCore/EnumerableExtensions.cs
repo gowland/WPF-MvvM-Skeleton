@@ -18,6 +18,20 @@ namespace DotNetCore
             return -1;
         }
 
+	
+        public static IEnumerable<int> IndicesOf<T>(this IEnumerable<T> list, T element)
+        {
+            return list.Select((value, index) => new {value, index})
+                .Where(tuple => tuple.value.Equals(element))
+                .Select(tuple => tuple.index);
+        }
+        
+        public static int NthIndexOf<T>(this IEnumerable<T> list, T element, int n) 
+        {
+            var indices = list.IndicesOf(element).ToList();
+            return n > 0 && indices.Count >= n ? indices.Skip(n-1).First() : -1;
+        }        
+
         public static T UnlikeValue<T, U>(this IEnumerable<T> numbers, Func<T, U> groupMethod)
         {
             return numbers.GroupBy(groupMethod)
