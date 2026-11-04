@@ -1,6 +1,5 @@
-﻿namespace MvvMCore.ViewModels
+namespace MvvMCore.ViewModels;
+
+public abstract class ViewModelBase : NotifyPropertyChangedBase
 {
-    public abstract class ViewModelBase : NotifyPropertyChangedBase
-    {
-    }
 }

@@ -1,25 +1,24 @@
-﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace MvvMCore.ViewModels
+namespace MvvMCore.ViewModels;
+
+public abstract class NotifyPropertyChangedBase : INotifyPropertyChanged
 {
-    public abstract class NotifyPropertyChangedBase : INotifyPropertyChanged
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+    protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
     {
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        if (EqualityComparer<T>.Default.Equals(storage, value))
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            return false;
         }
 
-        protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = "")
-        {
-            if (EqualityComparer<T>.Default.Equals(storage, value))
-                return false;
-            storage = value;
-            OnPropertyChanged(propertyName);
-            return true;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        storage = value;
+        OnPropertyChanged(propertyName);
+        return true;
     }
 }

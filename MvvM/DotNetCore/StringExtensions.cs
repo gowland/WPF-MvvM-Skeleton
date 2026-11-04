@@ -1,30 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+namespace DotNetCore;
 
-namespace DotNetCore
+public static class StringExtensions
 {
-    public static class StringExtensions
+    private static IEnumerable<int> SplitStringToInts(string numbers) =>
+        numbers.Split(' ').Select(int.Parse);
+
+    public static string? GetUntil(this string? text, string stopAt = "-")
     {
-        private static IEnumerable<int> SplitStringToInts(string numbers)
+        if (!string.IsNullOrWhiteSpace(text))
         {
-            return numbers.Split(' ')
-                .Select(s => int.Parse(s));
-        }
+            var charLocation = text.IndexOf(stopAt, StringComparison.Ordinal);
 
-        public static string GetUntil(this string text, string stopAt = "-")
-        {
-            if (!String.IsNullOrWhiteSpace(text))
+            if (charLocation > 0)
             {
-                int charLocation = text.IndexOf(stopAt, StringComparison.Ordinal);
-
-                if (charLocation > 0)
-                {
-                    return text.Substring(0, charLocation);
-                }
+                return text[..charLocation];
             }
-
-            return text;
         }
+
+        return text;
     }
 }

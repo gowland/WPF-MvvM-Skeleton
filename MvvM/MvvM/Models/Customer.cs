@@ -1,32 +1,21 @@
-﻿using MvvMCore.ViewModels;
+using MvvMCore.ViewModels;
 
-namespace MvvM.Models
+namespace MvvM.Models;
+
+public class Customer(string customerName) : NotifyPropertyChangedBase
 {
-    public class Customer : NotifyPropertyChangedBase
+    private string _name = customerName;
+    private int _updates;
+
+    public int Updates
     {
-        private string _name;
-        private int _updates;
+        get => _updates;
+        set => SetProperty(ref _updates, value);
+    }
 
-        public Customer(string customerName)
-        {
-            Name = customerName;
-        }
-
-        public int Updates
-        {
-            get => _updates;
-            set => SetProperty(ref _updates, value);
-        }
-
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                // TODO: Use base class setter method
-                _name = value; 
-                OnPropertyChanged();
-            }
-        }
+    public string Name
+    {
+        get => _name;
+        set => SetProperty(ref _name, value);
     }
 }
