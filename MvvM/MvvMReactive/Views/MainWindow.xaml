@@ -4,50 +4,280 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:MvvMReactive.ViewModels"
-        xmlns:models="clr-namespace:MvvMReactive.Models"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModels:CustomerViewModel}"
-        Title="MvvM Reactive" Height="350" Width="525">
+        Title="Customers | Reactive workspace"
+        Width="1000" Height="820" MinWidth="800" MinHeight="620"
+        WindowStartupLocation="CenterScreen"
+        Background="#F3F5F9" FontFamily="Segoe UI" FontSize="14"
+        Foreground="#19283F"
+        UseLayoutRounding="True">
+    <Window.Resources>
+        <SolidColorBrush x:Key="AccentBrush" Color="#087F8C"/>
+        <SolidColorBrush x:Key="MutedBrush" Color="#627087"/>
+        <SolidColorBrush x:Key="LineBrush" Color="#E2E8F0"/>
+
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="20,11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Chrome" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="#066773"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="#054F59"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Chrome" Property="BorderBrush" Value="#73D9E1"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Chrome" Property="Background" Value="#E2E8F0"/>
+                                <Setter Property="Foreground" Value="#627087"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#F8FAFC"/>
+            <Setter Property="BorderBrush" Value="#C5CEDB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,11"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="Chrome" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Chrome" Property="BorderBrush" Value="#8999B0"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                                <Setter TargetName="Chrome" Property="Background" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F8FAFC"/>
+            <Setter Property="Foreground" Value="{StaticResource MutedBrush}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="20,13"/>
+            <Setter Property="BorderBrush" Value="{StaticResource LineBrush}"/>
+            <Setter Property="BorderThickness" Value="0,1,0,1"/>
+        </Style>
+
+        <Style TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="#075E69"/>
+                </Trigger>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="Background" Value="#CCE9EE"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="MinHeight" Value="62"/>
+            <Setter Property="BorderBrush" Value="#EDF1F6"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F3F8FA"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#E3F3F5"/>
+                    <Setter Property="Foreground" Value="#075E69"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal">
-            <ListBox ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type models:Customer}">
-                        <UniformGrid Rows="1">
-                            <TextBlock Text="{Binding Name}"/>
-                            <TextBlock Text="{Binding Updates}"/>
-                        </UniformGrid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+        <Border Background="#17263E" Padding="32,21">
+            <DockPanel>
+                <Border DockPanel.Dock="Right" Background="#263950" CornerRadius="12"
+                        Padding="12,5" VerticalAlignment="Center">
+                    <TextBlock Text="ReactiveUI + DynamicData" Foreground="#B4DAE0" FontSize="12"/>
+                </Border>
+                <StackPanel Orientation="Horizontal">
+                    <Border Background="{StaticResource AccentBrush}" CornerRadius="9" Width="36" Height="36">
+                        <TextBlock Text="R" Foreground="White" FontSize="20" FontWeight="Bold"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <TextBlock Text="Reactive workspace" Foreground="White" FontWeight="SemiBold"
+                               FontSize="16" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
 
-            <Button Command="{Binding UpdateCommand}" Width="85">Update Selected</Button>
+        <Grid Grid.Row="1" Margin="32,26,32,24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <TextBox Text="{Binding NewUserName, UpdateSourceTrigger=PropertyChanged}" Width="80"/>
-            <Button Command="{Binding AddNewUserCommand}" Width="85">Add</Button>
-        </StackPanel>
+            <StackPanel Margin="0,0,0,22">
+                <TextBlock Text="Customers" FontSize="30" FontWeight="SemiBold"/>
+                <TextBlock Text="A small workspace for your next big experiment."
+                           Foreground="{StaticResource MutedBrush}" Margin="0,5,0,0"/>
+            </StackPanel>
 
-        <DataGrid Grid.Row="2" ItemsSource="{Binding Customers}" AutoGenerateColumns="False" IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Updates" Binding="{Binding Updates}"/>
-                <DataGridTemplateColumn Header="Progress">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Canvas Width="100" Height="15">
-                                <Rectangle Width="100" Height="13" Fill="Yellow"/>
-                                <Rectangle Width="{Binding Updates}" Height="13" Fill="Red"/>
-                            </Canvas>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+            <Border Grid.Row="1" Background="White" CornerRadius="12"
+                    BorderBrush="{StaticResource LineBrush}" BorderThickness="1" Padding="22,18"
+                    Margin="0,0,0,20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="18"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <Label Content="_Customer name" Target="{Binding ElementName=NewCustomerName}"
+                               Padding="0" Margin="0,0,0,8" FontWeight="SemiBold"/>
+                        <TextBox x:Name="NewCustomerName"
+                                 Text="{Binding NewUserName, UpdateSourceTrigger=PropertyChanged}"
+                                 AutomationProperties.Name="Customer name"/>
+                    </StackPanel>
+                    <Button Grid.Column="2" Content="_Add customer"
+                            Command="{Binding AddNewUserCommand}" VerticalAlignment="Bottom"/>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="2" Background="White" CornerRadius="12"
+                    BorderBrush="{StaticResource LineBrush}" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel Margin="22,18">
+                        <Border DockPanel.Dock="Right" Background="#EFF3F8" CornerRadius="10" Padding="10,4">
+                            <TextBlock Text="{Binding Customers.Count, StringFormat={}{0} customers}"
+                                       FontSize="12" Foreground="{StaticResource MutedBrush}"/>
+                        </Border>
+                        <TextBlock Text="Customer directory" FontWeight="SemiBold" FontSize="16"
+                                   VerticalAlignment="Center"/>
+                    </DockPanel>
+
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding Customers}"
+                              SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}"
+                              AutoGenerateColumns="False" IsReadOnly="True"
+                              SelectionMode="Single" SelectionUnit="FullRow"
+                              CanUserAddRows="False" CanUserDeleteRows="False"
+                              CanUserReorderColumns="False" CanUserResizeRows="False"
+                              HeadersVisibility="Column" GridLinesVisibility="None"
+                              BorderThickness="0" Background="White"
+                              HorizontalScrollBarVisibility="Auto"
+                              AutomationProperties.Name="Customer directory">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="CUSTOMER" Width="*" SortMemberPath="Name">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Background="#E5F2F4" Width="32" Height="32" CornerRadius="10"
+                                                    Margin="0,0,12,0">
+                                                <TextBlock Text="&#xE77B;" FontFamily="Segoe MDL2 Assets"
+                                                           Foreground="{StaticResource AccentBrush}"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="UPDATES" Width="110" SortMemberPath="Updates">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Updates}" FontWeight="SemiBold"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="ACTIVITY" Width="190" CanUserSort="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Border Height="6" Background="#E8EDF4" CornerRadius="3"/>
+                                            <Border Height="6" Background="{StaticResource AccentBrush}" CornerRadius="3"
+                                                    HorizontalAlignment="Left" MaxWidth="140"
+                                                    Width="{Binding Updates}"
+                                                    ToolTip="{Binding Updates, StringFormat={}{0} updates}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Border Grid.Row="2" BorderBrush="{StaticResource LineBrush}" BorderThickness="0,1,0,0"
+                            Padding="22,14">
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Content="_Update selected"
+                                    Command="{Binding UpdateCommand}"/>
+                            <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
+                                <TextBlock Text="{Binding SelectedCustomer.Name, TargetNullValue=No customer selected, FallbackValue=No customer selected}"
+                                           FontWeight="SemiBold"/>
+                                <TextBlock Text="Select a row, then record an update."
+                                           Foreground="{StaticResource MutedBrush}" FontSize="12" Margin="0,3,0,0"/>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <TextBlock Grid.Row="3" Text="MVVM SKELETON / REACTIVE EDITION" FontSize="10"
+                       Foreground="{StaticResource MutedBrush}" Margin="0,16,0,0"/>
+        </Grid>
     </Grid>
 </Window>
